@@ -1,19 +1,39 @@
 "use client";
 
-import { UserButton, useAuth } from "@clerk/nextjs";
+import { UserButton, currentUser } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
-import { isTeacher } from "@/lib/teacher";
-
 import { SearchInput } from "./search-input";
+import { User } from "@clerk/nextjs/server";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+
+const isTeacherFetcher = () => axios.get("/api/isteacher").then((resp) => {
+  console.log(resp);
+  
+  return resp.status === 200;
+});
 
 export const NavbarRoutes = () => {
-  const { userId } = useAuth();
-  const pathname = usePathname();
 
+  const [isTeacher, setIsTeacher] = useState<boolean | null>(null);
+  const [isLoading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    isTeacherFetcher()
+      .then((data) => {
+        setIsTeacher(data);
+        setLoading(false);
+      });
+
+  }, []);
+
+
+  const pathname = usePathname();
   const isTeacherPage = pathname?.startsWith("/teacher");
   const isCoursePage = pathname?.includes("/courses");
   const isSearchPage = pathname === "/search";
@@ -33,7 +53,7 @@ export const NavbarRoutes = () => {
               Exit
             </Button>
           </Link>
-        ) : isTeacher(userId) ? (
+        ) : !isLoading && isTeacher ? (
           <Link href="/teacher/courses">
             <Button size="sm" variant="ghost">
               Teacher mode
