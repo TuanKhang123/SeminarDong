@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { SearchInput } from "./search-input";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ConfirmModal } from "./modals/confirm-modal";
 import toast from "react-hot-toast";
+import { TermsOfUsemModal } from "./modals/terms-of-use-modal";
 
 
 const isTeacherFetcher = () => axios.get("/api/teacher").then((resp) => {
@@ -74,11 +74,11 @@ export const NavbarRoutes = () => {
                   Teacher mode
                 </Button>
               </Link> :
-              <ConfirmModal onConfirm={onConfirm}>
+              <TermsOfUsemModal onConfirm={onConfirm}>
                 <Button size="sm" variant="ghost" disabled={isLoading} >
-                  Become a teacher
+                  Become an instructor
                 </Button>
-              </ConfirmModal>
+              </TermsOfUsemModal>
           ) : null
         }
         <UserButton
