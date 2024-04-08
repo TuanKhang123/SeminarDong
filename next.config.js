@@ -4,7 +4,12 @@ const nextConfig = {
     domains: [
       "utfs.io"
     ]
-  }
+  },
+  // logging: {
+  //   fetches: {
+  //     fullUrl: true,
+  //   },
+  // },
 }
 
 module.exports = nextConfig
