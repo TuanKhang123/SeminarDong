@@ -14,8 +14,6 @@ import { TermsOfUsemModal } from "./modals/terms-of-use-modal";
 
 
 const isTeacherFetcher = () => axios.get("/api/teacher").then((resp) => {
-  console.log(resp);
-
   return resp.status === 200 && resp.data["isTeacher"];
 });
 

@@ -7,9 +7,12 @@ import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
 
-import { VideoPlayer } from "./_components/video-player";
+import  VideoPlayer  from "./_components/video/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
+import "media-chrome";
+
+
 
 const ChapterIdPage = async ({
   params
@@ -17,15 +20,14 @@ const ChapterIdPage = async ({
   params: { courseId: string; chapterId: string }
 }) => {
   const { userId } = auth();
-  
+
   if (!userId) {
     return redirect("/");
-  } 
+  }
 
   const {
     chapter,
     course,
-    muxData,
     attachments,
     nextChapter,
     userProgress,
@@ -40,11 +42,14 @@ const ChapterIdPage = async ({
     return redirect("/")
   }
 
+  const chromeStyles = {
+    "--media-primary-color": "white",
+  };
 
   const isLocked = !chapter.isFree && !purchase;
   const completeOnEnd = !!purchase && !userProgress?.isCompleted;
 
-  return ( 
+  return (
     <div>
       {userProgress?.isCompleted && (
         <Banner
@@ -60,14 +65,14 @@ const ChapterIdPage = async ({
       )}
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         <div className="p-4">
-          <VideoPlayer
-            chapterId={params.chapterId}
-            title={chapter.title}
-            courseId={params.courseId}
-            nextChapterId={nextChapter?.id}
-            playbackId={muxData?.playbackId!}
-            isLocked={isLocked}
-            completeOnEnd={completeOnEnd}
+          <VideoPlayer 
+              chapterId={params.chapterId}
+              title={chapter.title}
+              courseId={params.courseId}
+              nextChapterId={nextChapter?.id}
+              videoId={chapter.videoId!}
+              isLocked={isLocked}
+              completeOnEnd={completeOnEnd}
           />
         </div>
         <div>
@@ -98,7 +103,7 @@ const ChapterIdPage = async ({
               <Separator />
               <div className="p-4">
                 {attachments.map((attachment) => (
-                  <a 
+                  <a
                     href={attachment.url}
                     target="_blank"
                     key={attachment.id}
@@ -116,7 +121,7 @@ const ChapterIdPage = async ({
         </div>
       </div>
     </div>
-   );
+  );
 }
- 
+
 export default ChapterIdPage;

@@ -39,6 +39,8 @@ export const ChapterAccessForm = ({
   courseId,
   chapterId
 }: ChapterAccessFormProps) => {
+  
+
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);

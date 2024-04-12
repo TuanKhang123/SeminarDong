@@ -9,12 +9,13 @@ export async function PUT(
 ) {
   try {
     const { userId } = auth();
-    const { isCompleted } = await req.json();
+    const { isCompleted, time } = await req.json();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     } 
 
+    
     const userProgress = await db.userProgress.upsert({
       where: {
         userId_chapterId: {
@@ -23,7 +24,8 @@ export async function PUT(
         }
       },
       update: {
-        isCompleted
+        isCompleted,
+        time,
       },
       create: {
         userId,
