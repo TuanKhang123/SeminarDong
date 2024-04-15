@@ -8,6 +8,9 @@ import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
 
 import { VideoPlayer } from "./_components/video-player";
+
+// import { VideoPlayerUI } from "./_components/video-player-ui";
+
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
 
@@ -69,6 +72,8 @@ const ChapterIdPage = async ({
             isLocked={isLocked}
             completeOnEnd={completeOnEnd}
           />
+
+          {/* <VideoPlayerUI></VideoPlayerUI> */}
         </div>
         <div>
           <div className="p-4 flex flex-col md:flex-row items-center justify-between">
