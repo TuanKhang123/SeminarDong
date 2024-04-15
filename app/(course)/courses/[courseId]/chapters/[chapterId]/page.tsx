@@ -7,7 +7,7 @@ import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
 
-import { VideoPlayer } from "./_components/video-player";
+import  VideoPlayer  from "./_components/video/video-player";
 
 // import { VideoPlayerUI } from "./_components/video-player-ui";
 
@@ -28,7 +28,6 @@ const ChapterIdPage = async ({
   const {
     chapter,
     course,
-    muxData,
     attachments,
     nextChapter,
     userProgress,
@@ -68,7 +67,7 @@ const ChapterIdPage = async ({
             title={chapter.title}
             courseId={params.courseId}
             nextChapterId={nextChapter?.id}
-            playbackId={muxData?.playbackId!}
+            videoId={chapter?.videoId!}
             isLocked={isLocked}
             completeOnEnd={completeOnEnd}
           />

@@ -67,9 +67,9 @@ export const ChaptersList = ({
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {chapters.map((chapter, index) => (
-              <Draggable 
-                key={chapter.id} 
-                draggableId={chapter.id} 
+              <Draggable
+                key={chapter.id}
+                draggableId={chapter.id}
                 index={index}
               >
                 {(provided) => (

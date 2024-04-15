@@ -1,4 +1,4 @@
-import { isTeacher } from "@/lib/teacher";
+// import { isTeacher } from "@/lib/teacher";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
@@ -7,9 +7,9 @@ const TeacherLayout = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { userId } = auth();
-
-  if (!isTeacher(userId)) {
+  const { userId, sessionClaims } = auth();
+  
+  if (sessionClaims?.metadata === undefined || sessionClaims?.metadata!.role !== "teacher") {
     return redirect("/");
   }
 

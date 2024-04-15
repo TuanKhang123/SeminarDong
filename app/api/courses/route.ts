@@ -2,16 +2,16 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-import { isTeacher } from "@/lib/teacher";
+// import { isTeacher } from "@/lib/teacher";
 
 export async function POST(
   req: Request,
 ) {
   try {
-    const { userId } = auth();
+    const { userId, sessionClaims } = auth();
     const { title } = await req.json();
 
-    if (!userId || !isTeacher(userId)) {
+    if (!userId || sessionClaims?.metadata.role === undefined || sessionClaims.metadata.role !== "teacher") {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 

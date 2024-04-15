@@ -29,9 +29,6 @@ const ChapterIdPage = async ({
       id: params.chapterId,
       courseId: params.courseId
     },
-    include: {
-      muxData: true,
-    },
   });
 
   if (!chapter) {
@@ -41,8 +38,9 @@ const ChapterIdPage = async ({
   const requiredFields = [
     chapter.title,
     chapter.description,
-    chapter.videoUrl,
+    chapter.videoId,
   ];
+  
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
