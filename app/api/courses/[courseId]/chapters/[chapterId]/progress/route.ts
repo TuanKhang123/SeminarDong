@@ -11,11 +11,14 @@ export async function PUT(
     const { userId } = auth();
     const { isCompleted, time } = await req.json();
 
+    console.log("isCompleted:" + isCompleted);
+    console.log("time:" + time);
+
+
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
-    } 
+    }
 
-    
     const userProgress = await db.userProgress.upsert({
       where: {
         userId_chapterId: {
