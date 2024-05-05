@@ -77,20 +77,27 @@ const ButtonAddNote = ({
     resolver: zodResolver(FormSchema),
   })
 
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control, setValue } = useForm();
 
   const onSubmit = async (data: any) => {
     setTimeNote(3)
     try {
-      if (currentTime !== undefined) {
-        const response = await axios.post(`/api/courses/${courseId}/chapters/${chapterId}/note`, {
-          content: data?.bio,
-          createAt: parseFloat(currentTime?.toFixed(1))
-        })
-        toast.success("Note created");
-        setIsDialogOpen(!isDialogOpen)
-        router.refresh();
+      console.log(data);
 
+      if (currentTime !== undefined) {
+        if (data?.bio !== undefined && data?.bio !== '') {
+          const response = await axios.post(`/api/courses/${courseId}/chapters/${chapterId}/note`, {
+            content: data?.bio,
+            createAt: parseFloat(currentTime?.toFixed(1))
+          })
+          toast.success("Note created");
+          setIsDialogOpen(!isDialogOpen)
+          setValue('bio', '');
+          router.refresh();
+        }
+        else {
+          toast.error("Content must be at least 1 characters.");
+        }
       }
     } catch (error) {
       console.log(error);
@@ -184,10 +191,10 @@ const VideoPlayer = ({
     }
   }
 
-  
 
-  
-  
+
+
+
   return (
     <>
       <div className="relative aspect-video">
