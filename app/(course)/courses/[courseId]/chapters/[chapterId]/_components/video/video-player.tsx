@@ -6,17 +6,25 @@ import {
   MediaControlBar,
   MediaController,
   MediaPlayButton,
-  MediaRenditionMenu,
-  MediaRenditionMenuButton,
   MediaTimeRange,
-
+  MediaSeekBackwardButton,
+  MediaSeekForwardButton,
+  MediaMuteButton,
+  MediaVolumeRange,
+  MediaTimeDisplay,
+  MediaFullscreenButton,
+  MediaSettingsMenuButton,
+  MediaSettingsMenu,
+  MediaSettingsMenuItem,
+  MediaPlaybackRateMenu,
+  MediaRenditionMenu,
 } from "media-chrome/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useConfettiStore } from "@/hooks/use-confetti-store";
 import toast from "react-hot-toast";
-import { Loader2, Lock } from "lucide-react";
-import { SaveProgress } from "./save-progress";
+import { Lock } from "lucide-react";
+import { useState } from "react";
 
 interface VideoPlayerProps {
   videoId: string;
@@ -39,7 +47,7 @@ const VideoPlayer = ({
 }: VideoPlayerProps) => {
   const router = useRouter();
   const confetti = useConfettiStore();
-
+  const [openVolume, setOpenVolume] = useState<boolean>(false)
 
   const onEnd = async () => {
     try {
@@ -63,9 +71,10 @@ const VideoPlayer = ({
       toast.error("Something went wrong");
     }
   }
+  console.log(openVolume);
 
   console.log(`video ID: ${videoId}`);
-  
+
   return (
     <div className="relative aspect-video">
       {isLocked && (
@@ -78,7 +87,7 @@ const VideoPlayer = ({
       )}
       {!isLocked && (
         <MediaProvider >
-          <MediaController className="w-full">
+          <MediaController className="w-full h-full">
             <HlsVideo
               // src={`http://localhost:5000/api/video/${videoId}`}
               src="https://stream.mux.com/A3VXy02VoUinw01pwyomEO3bHnG4P32xzV7u1j1FSzjNg.m3u8"
@@ -86,11 +95,34 @@ const VideoPlayer = ({
               onEnded={onEnd}
               preload="metadata"
             />
-            <MediaRenditionMenu />
+
+            <MediaSettingsMenu hidden anchor="auto">
+              <MediaSettingsMenuItem>
+                Speed
+                <MediaPlaybackRateMenu slot="submenu" hidden>
+                  <div slot="title">Speed</div>
+                </MediaPlaybackRateMenu>
+              </MediaSettingsMenuItem>
+              <MediaSettingsMenuItem>
+                Quality
+                <MediaRenditionMenu slot="submenu" hidden>
+                  <div slot="title">Quality</div>
+                </MediaRenditionMenu>
+              </MediaSettingsMenuItem>
+            </MediaSettingsMenu>
+
             <MediaControlBar>
+
               <MediaPlayButton />
+              <MediaSeekBackwardButton />
+              <MediaSeekForwardButton />
+              <MediaMuteButton />
+              <MediaVolumeRange />
               <MediaTimeRange />
-              <MediaRenditionMenuButton />
+              <MediaTimeDisplay showduration />
+              <MediaSettingsMenuButton />
+              <MediaFullscreenButton />
+
             </MediaControlBar>
           </MediaController>
         </MediaProvider>
