@@ -1,22 +1,51 @@
 import { db } from "@/lib/db";
 import { Course, Purchase } from "@prisma/client";
+import { log } from "console";
 
 type PurchaseWithCourse = Purchase & {
   course: Course;
 };
 
+interface CourseDate {
+  total: number;
+  image: string;
+  count: number;
+}
+
+const getTopCourse = (grouped: { [courseTitle: string]: CourseDate }) => {
+
+  const arrGroup = Object.entries(grouped).map(([courseTitle, detail]) => ({
+    name: courseTitle,
+    total: detail?.total,
+    image: detail?.image,
+    count: detail?.count
+  }));
+
+  const arrSort = arrGroup.sort((a: any, b: any) => b.total - a.total)
+
+  const arrTop5 = arrSort.slice(0, 5)
+
+  return arrTop5;
+}
+
 const groupByCourse = (purchases: PurchaseWithCourse[]) => {
-  const grouped: { [courseTitle: string]: number } = {};
-  
+  const grouped: { [courseTitle: string]: CourseDate } = {};
+
   purchases.forEach((purchase) => {
     const courseTitle = purchase.course.title;
     if (!grouped[courseTitle]) {
-      grouped[courseTitle] = 0;
+      grouped[courseTitle] = {
+        total: 0,
+        image: purchase?.course?.imageUrl || " ",
+        count: 0
+      };
     }
-    grouped[courseTitle] += purchase.course.price!;
+    grouped[courseTitle].count++;
+    grouped[courseTitle].total += purchase.course.price!;
   });
 
-  return grouped;
+  const arrTop5 = getTopCourse(grouped)
+  return arrTop5;
 };
 
 export const getAnalytics = async (userId: string) => {
@@ -32,14 +61,10 @@ export const getAnalytics = async (userId: string) => {
       }
     });
 
-    const groupedEarnings = groupByCourse(purchases);
-    const data = Object.entries(groupedEarnings).map(([courseTitle, total]) => ({
-      name: courseTitle,
-      total: total,
-    }));
-
+    const data = groupByCourse(purchases);
+    
     const totalRevenue = data.reduce((acc, curr) => acc + curr.total, 0);
-    const totalSales = purchases.length;
+    const totalSales = data.reduce((acc, cur) => acc + cur.count, 0)
 
     return {
       data,

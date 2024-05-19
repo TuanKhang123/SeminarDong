@@ -80,7 +80,8 @@ const VideoPlayer = ({
         <MediaProvider >
           <MediaController className="w-full">
             <HlsVideo
-              src={`http://localhost:5000/api/video/${videoId}`}
+              // src={`http://localhost:5000/api/video/${videoId}`}
+              src="https://stream.mux.com/A3VXy02VoUinw01pwyomEO3bHnG4P32xzV7u1j1FSzjNg.m3u8"
               slot="media"
               onEnded={onEnd}
               preload="metadata"

@@ -12,14 +12,14 @@ const AnalyticsPage = async () => {
   if (!userId) {
     return redirect("/");
   }
-
+ 
   const {
     data,
     totalRevenue,
     totalSales,
   } = await getAnalytics(userId);
 
-  return ( 
+  return (
     <div className="p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <DataCard
@@ -36,7 +36,7 @@ const AnalyticsPage = async () => {
         data={data}
       />
     </div>
-   );
+  );
 }
- 
+
 export default AnalyticsPage;
