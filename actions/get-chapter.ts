@@ -39,6 +39,13 @@ export const getChapter = async ({
       }
     });
 
+    const notes = await db.note.findMany({
+      where: {
+        userId: userId,
+        chapterId: chapterId,
+      }
+    })
+
     if (!chapter || !course) {
       throw new Error("Chapter or course not found");
     }
@@ -87,6 +94,7 @@ export const getChapter = async ({
       nextChapter,
       userProgress,
       purchase,
+      notes
     };
   } catch (error) {
     console.log("[GET_CHAPTER]", error);
@@ -98,6 +106,7 @@ export const getChapter = async ({
       nextChapter: null,
       userProgress: null,
       purchase: null,
+      notes: null
     }
   }
 }
